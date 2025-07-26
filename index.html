@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitosis Discord Allocation Checker | Speculation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-light: #4cc9f0;
+            --secondary: #4361ee;
+            --accent: #f72585;
+            --dark: #0d1b2a;
+            --darker: #070f1a;
+            --light: #e0e1dd;
+            --lighter: #ffffff;
+            --card-bg: #1b263b;
+            --border: #2e4057;
+            --success: #4cc9f0;
+            --warning: #ffbe0b;
+            --danger: #ef233c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--primary-light);
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .selection-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .panel:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--lighter);
+        }
+
+        .role-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .role-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .role-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .role-item.selected {
+            background: rgba(58, 134, 255, 0.15);
+            border-color: var(--primary);
+        }
+
+        .role-item input[type="checkbox"],
+        .role-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 1rem;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .role-label {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .skill-options {
+            margin-top: 0.75rem;
+            margin-left: 2rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .skill-level {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .skill-level-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--light);
+        }
+
+        .contest-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--warning);
+            margin-top: 0.5rem;
+        }
+
+        .calculate-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 1rem auto 2rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.4);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(58, 134, 255, 0.5);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            display: none;
+            border: 1px solid var(--border);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--lighter);
+            margin-left: 1rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--primary-light);
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: var(--lighter);
+        }
+
+        .total-row {
+            font-size: 1.25rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--primary);
+        }
+
+        .total-value {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .selection-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .panel {
+                padding: 1.25rem;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--primary-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Mitosis Discord Allocation Checker</h1>
+            <p class="subtitle">Select your roles to calculate your token allocation (speculation)</p>
+        </header>
+
+        <div class="main-content">
+            <div class="selection-section">
+                <!-- Tier Roles Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                            </svg>
+                        </div>
+                        <h2 class="panel-title">Tier Roles</h2>
+                    </div>
+                    <div class="role-list">
+                        <label class="role-item">
+                            <input type="radio" name="tier-role" value="none" checked onchange="toggleTierRole(this)">
+                            <span class="role-label">None (Select if applicable)</span>
+                        </label>
+                        <label class="role-item">
+                            <input type="radio" name="tier-role" value="sensei" onchange="toggleTierRole(this)">
+                            <span class="role-label">Sensei</span>
+                        </label>
+                        <label class="role-item">
+                            <input type="radio" name="tier-role" value="daigakusei" onchange="toggleTierRole(this)">
+                            <span class="role-label">Daigakusei</span>
+                        </label>
+                        <label class="role-item">
+                            <input type="radio" name="tier-role" value="gakusei" onchange="toggleTierRole(this)">
+                            <span class="role-label">Gakusei</span>
+                        </label>
+                        <label class="role-item">
+                            <input type="radio" name="tier-role" value="emeritus-sensei" onchange="toggleTierRole(this)">
+                            <span class="role-label">Emeritus Sensei</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Additional Roles Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                        </div>
+                        <h2 class="panel-title">Additional Roles</h2>
+                    </div>
+                    <div class="role-list">
+                        <label class="role-item">
+                            <input type="checkbox" name="additional-role" value="royal-gem" onchange="toggleRole(this)">
+                            <span class="role-label">Royal Gem</span>
+                        </label>
+                        <label class="role-item">
+                            <input type="checkbox" name="additional-role" value="og" onchange="toggleRole(this)">
+                            <span class="role-label">OG</span>
+                        </label>
+                        <label class="role-item">
+                            <input type="checkbox" name="additional-role" value="guru" onchange="toggleRole(this)">
+                            <span class="role-label">Guru</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Skill Roles Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.767 24.767 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25.286 25.286 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135z"/>
+                            </svg>
+                        </div>
+                        <h2 class="panel-title">Skill Roles</h2>
+                    </div>
+                    <div class="role-list">
+                        <!-- Artist -->
+                        <label class="role-item">
+                            <input type="checkbox" name="skill-role" value="artist" onchange="toggleSkill(this, 'artist')">
+                            <span class="role-label">Artist</span>
+                            <div class="skill-options" id="artist-options">
+                                <div class="skill-level">
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="artist-level" value="intern">
+                                        Intern
+                                    </label>
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="artist-level" value="mi">
+                                        MI
+                                    </label>
+                                </div>
+                                <label class="contest-option">
+                                    <input type="checkbox" name="artist-contest">
+                                    Earned through contest
+                                </label>
+                            </div>
+                        </label>
+
+                        <!-- Tuber -->
+                        <label class="role-item">
+                            <input type="checkbox" name="skill-role" value="tuber" onchange="toggleSkill(this, 'tuber')">
+                            <span class="role-label">Tuber</span>
+                            <div class="skill-options" id="tuber-options">
+                                <div class="skill-level">
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="tuber-level" value="intern">
+                                        Intern
+                                    </label>
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="tuber-level" value="mi">
+                                        MI
+                                    </label>
+                                </div>
+                                <label class="contest-option">
+                                    <input type="checkbox" name="tuber-contest">
+                                    Earned through contest
+                                </label>
+                            </div>
+                        </label>
+
+                        <!-- Analyst -->
+                        <label class="role-item">
+                            <input type="checkbox" name="skill-role" value="analyst" onchange="toggleSkill(this, 'analyst')">
+                            <span class="role-label">Analyst</span>
+                            <div class="skill-options" id="analyst-options">
+                                <div class="skill-level">
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="analyst-level" value="intern">
+                                        Intern
+                                    </label>
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="analyst-level" value="mi">
+                                        MI
+                                    </label>
+                                </div>
+                                <label class="contest-option">
+                                    <input type="checkbox" name="analyst-contest">
+                                    Earned through contest
+                                </label>
+                            </div>
+                        </label>
+
+                        <!-- Evangelist -->
+                        <label class="role-item">
+                            <input type="checkbox" name="skill-role" value="evangelist" onchange="toggleSkill(this, 'evangelist')">
+                            <span class="role-label">Evangelist</span>
+                            <div class="skill-options" id="evangelist-options">
+                                <div class="skill-level">
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="evangelist-level" value="intern">
+                                        Intern
+                                    </label>
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="evangelist-level" value="mi">
+                                        MI
+                                    </label>
+                                </div>
+                                <label class="contest-option">
+                                    <input type="checkbox" name="evangelist-contest">
+                                    Earned through contest
+                                </label>
+                            </div>
+                        </label>
+
+                        <!-- Consultant -->
+                        <label class="role-item">
+                            <input type="checkbox" name="skill-role" value="consultant" onchange="toggleSkill(this, 'consultant')">
+                            <span class="role-label">Consultant</span>
+                            <div class="skill-options" id="consultant-options">
+                                <div class="skill-level">
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="consultant-level" value="intern">
+                                        Intern
+                                    </label>
+                                    <label class="skill-level-option">
+                                        <input type="radio" name="consultant-level" value="mi">
+                                        MI
+                                    </label>
+                                </div>
+                                <label class="contest-option">
+                                    <input type="checkbox" name="consultant-contest">
+                                    Earned through contest
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateAllocation()">
+                Calculate Allocation
+            </button>
+
+            <div class="results-section" id="results">
+                <div class="results-header">
+                    <div class="panel-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                        </svg>
+                    </div>
+                    <h2 class="results-title">Allocation Results</h2>
+                </div>
+                
+                <div class="result-row">
+                    <span class="result-label">Tier Role:</span>
+                    <span class="result-value" id="tier-role-result">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Additional Roles:</span>
+                    <span class="result-value" id="additional-roles-result">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Skill Roles (Before Deduction):</span>
+                    <span class="result-value" id="skill-roles-base">-</span>
+                </div>
+                <div class="result-row" style="color: var(--warning);">
+                    <span class="result-label">Contest Role Deductions (45%):</span>
+                    <span class="result-value" id="skill-deduction">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Skill Roles (After Deduction):</span>
+                    <span class="result-value" id="skill-roles-result">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Multi-Skill Bonus:</span>
+                    <span class="result-value" id="multi-skill-bonus">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Authority Bonus:</span>
+                    <span class="result-value" id="authority-bonus">-</span>
+                </div>
+                <div class="result-row total-row">
+                    <span class="result-label">Total Allocation:</span>
+                    <span class="result-value total-value" id="total-allocation">-</span>
+                </div>
+                <div style="display: flex; justify-content: right;">
+                    <a href="https://x.com/svajpayee15">Made by @svajpayee15</a>
+                </div>
+
+            </div>
+        </div>
+
+        <footer>
+            Mitosis Allocation Checker | 0.55% of total supply (5.5M MITO)
+        </footer>
+        <a href="https://x.com/svajpayee15">Made by @svajpayee15</a>
+    </div>
+
+    <script>
+        // Allocation values (0.55% pool)
+        const allocationValues = {
+            // Tier roles
+            'sensei': 24000,
+            'daigakusei': 7000,
+            'gakusei': 2100,
+            'emeritus-sensei': 7500,
+            
+            // Additional roles
+            'royal-gem': 28000,
+            'og': 5000,
+            'guru': 1900,
+            
+            // Skill roles
+            'artist': {
+                'intern': 6000,
+                'mi': 12000
+            },
+            'tuber': {
+                'intern': 5500,
+                'mi': 11000
+            },
+            'analyst': {
+                'intern': 6000,
+                'mi': 12000
+            },
+            'evangelist': {
+                'intern': 6000,
+                'mi': 12000
+            },
+            'consultant': {
+                'intern': 6000,
+                'mi': 12000
+            }
+        };
+
+        // Role selection handlers
+        function toggleTierRole(element) {
+            const parent = element.closest('.role-item');
+            document.querySelectorAll('.role-list .role-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            if (element.checked && element.value !== 'none') {
+                parent.classList.add('selected');
+            }
+        }
+
+        function toggleRole(element) {
+            const parent = element.closest('.role-item');
+            if (element.checked) {
+                parent.classList.add('selected');
+            } else {
+                parent.classList.remove('selected');
+            }
+        }
+
+        function toggleSkill(element, skillName) {
+            const parent = element.closest('.role-item');
+            const options = parent.querySelector('.skill-options');
+            
+            if (element.checked) {
+                parent.classList.add('selected');
+                options.style.display = 'flex';
+                
+                // Auto-select first level if none selected
+                if (!parent.querySelector('input[type="radio"]:checked')) {
+                    parent.querySelector('input[type="radio"]').checked = true;
+                }
+            } else {
+                parent.classList.remove('selected');
+                options.style.display = 'none';
+            }
+        }
+
+        // Main calculation function
+        function calculateAllocation() {
+            // Get tier role (if any)
+            const tierRole = document.querySelector('input[name="tier-role"]:checked');
+            const hasTierRole = tierRole && tierRole.value !== 'none';
+            const tierRoleValue = hasTierRole ? allocationValues[tierRole.value] : 0;
+
+            // Get additional roles
+            const additionalRoles = Array.from(document.querySelectorAll('input[name="additional-role"]:checked'))
+                .map(role => role.value);
+
+            // Get skill roles
+            const skillRoles = [];
+            const skillCheckboxes = Array.from(document.querySelectorAll('input[name="skill-role"]:checked'));
+            
+            skillCheckboxes.forEach(checkbox => {
+                const skillName = checkbox.value;
+                const level = document.querySelector(`input[name="${skillName}-level"]:checked`);
+                const isContest = document.querySelector(`input[name="${skillName}-contest"]:checked`) !== null;
+                
+                if (level) {
+                    skillRoles.push({
+                        name: skillName,
+                        level: level.value,
+                        isContest: isContest
+                    });
+                }
+            });
+
+            // Calculate allocation
+            let additionalRolesValue = additionalRoles.reduce((sum, role) => {
+                return sum + (allocationValues[role] || 0);
+            }, 0);
+            
+            // Calculate skill roles (with contest deductions)
+            let skillRolesBaseValue = 0;
+            let skillDeduction = 0;
+            let skillRolesFinalValue = 0;
+            
+            skillRoles.forEach(role => {
+                const baseValue = allocationValues[role.name][role.level] || 0;
+                skillRolesBaseValue += baseValue;
+                
+                if (role.isContest) {
+                    const deduction = baseValue * 0.45;
+                    skillDeduction += deduction;
+                    skillRolesFinalValue += (baseValue - deduction);
+                } else {
+                    skillRolesFinalValue += baseValue;
+                }
+            });
+
+            // Calculate bonuses
+            let multiSkillBonus = 0;
+            if (skillRoles.length > 1) {
+                multiSkillBonus = skillRolesFinalValue * 0.05 * (skillRoles.length - 1);
+            }
+
+            let authorityBonus = 0;
+            const authorityRoles = ['royal-gem', 'sensei', 'og'];
+            
+            // Check tier role for authority bonus
+            if (hasTierRole && authorityRoles.includes(tierRole.value)) {
+                authorityBonus += tierRoleValue * 0.05;
+            }
+            
+            // Check additional roles for authority bonus
+            additionalRoles.forEach(role => {
+                if (authorityRoles.includes(role)) {
+                    authorityBonus += (allocationValues[role] || 0) * 0.05;
+                }
+            });
+
+            // Calculate total
+            const totalAllocation = tierRoleValue + additionalRolesValue + skillRolesFinalValue + 
+                                  multiSkillBonus + authorityBonus;
+
+            // Display results
+            document.getElementById('tier-role-result').textContent = 
+                hasTierRole ? 
+                `${tierRole.value.replace('-', ' ')} (${tierRoleValue.toLocaleString()} MITO)` : 
+                'None';
+            
+            document.getElementById('additional-roles-result').textContent = 
+                additionalRoles.length > 0 ? 
+                `${additionalRoles.map(r => r.replace('-', ' ')).join(', ')} (${additionalRolesValue.toLocaleString()} MITO)` : 
+                'None';
+            
+            document.getElementById('skill-roles-base').textContent = 
+                skillRoles.length > 0 ? 
+                `${skillRoles.map(r => `${r.name}-${r.level}`.replace('-', ' ')).join(', ')} (${skillRolesBaseValue.toLocaleString()} MITO)` : 
+                'None';
+            
+            document.getElementById('skill-deduction').textContent = 
+                skillDeduction > 0 ? 
+                `-${skillDeduction.toLocaleString()} MITO` : 
+                'None';
+            
+            document.getElementById('skill-roles-result').textContent = 
+                skillRoles.length > 0 ? 
+                `${skillRolesFinalValue.toLocaleString()} MITO` : 
+                'None';
+            
+            document.getElementById('multi-skill-bonus').textContent = 
+                `${multiSkillBonus.toLocaleString()} MITO (${skillRoles.length > 1 ? '5% per extra skill' : 'N/A'})`;
+            
+            document.getElementById('authority-bonus').textContent = 
+                `${authorityBonus.toLocaleString()} MITO (${authorityBonus > 0 ? '5% for authority roles' : 'N/A'})`;
+            
+            document.getElementById('total-allocation').textContent = 
+                `${Math.round(totalAllocation).toLocaleString()} MITO`;
+
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
