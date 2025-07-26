@@ -136,7 +136,7 @@
             display: flex;
             align-items: center;
             padding: 0.9rem 1rem;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.886);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
@@ -144,11 +144,11 @@
         }
 
         .role-item:hover {
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(10, 10, 10, 0.557);
         }
 
         .role-item.selected {
-            background: rgba(58, 134, 255, 0.15);
+            background: rgba(2, 17, 43, 0.776);
             border-color: var(--primary);
         }
 
@@ -269,6 +269,20 @@
         .result-value {
             font-weight: 600;
             color: var(--lighter);
+            text-align: right;
+        }
+
+        .role-display {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: #070f1a;
+            border-radius: 4px;
+            margin: 2px;
+        }
+        
+        .role-value {
+            font-weight: 500;
+            margin-left: 5px;
         }
 
         .total-row {
@@ -300,6 +314,15 @@
             .panel {
                 padding: 1.25rem;
             }
+            
+            .result-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .result-label, .result-value {
+                width: 100%;
+            }
         }
 
         footer {
@@ -309,6 +332,13 @@
             font-size: 0.9rem;
             border-top: 1px solid var(--border);
             margin-top: 2rem;
+        }
+        
+        .signature {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -338,11 +368,11 @@
                         </label>
                         <label class="role-item">
                             <input type="radio" name="tier-role" value="sensei" onchange="toggleTierRole(this)">
-                            <span class="role-label" style="color:rgb(148, 28, 4)">🧑‍🏫Sensei</span>
+                            <span class="role-label" style="color:rgb(148, 28, 4)">🧑‍🏫 Sensei</span>
                         </label>
                         <label class="role-item">
                             <input type="radio" name="tier-role" value="daigakusei" onchange="toggleTierRole(this)">
-                            <span class="role-label" style="color:rgb(255, 85, 0)">🧑‍🎓Daigakusei</span>
+                            <span class="role-label" style="color:rgb(255, 85, 0)">🧑‍🎓 Daigakusei</span>
                         </label>
                         <label class="role-item">
                             <input type="radio" name="tier-role" value="gakusei" onchange="toggleTierRole(this)">
@@ -369,15 +399,15 @@
                     <div class="role-list">
                         <label class="role-item">
                             <input type="checkbox" name="additional-role" value="royal-gem" onchange="toggleRole(this)">
-                            <span class="role-label" style="color:rgb()">🦄Royal Gem</span>
+                            <span class="role-label" style="color:#d8b4fe">🦄 Royal Gem</span>
                         </label>
                         <label class="role-item">
                             <input type="checkbox" name="additional-role" value="og" onchange="toggleRole(this)">
-                            <span class="role-label" style="color:rgb(240, 60, 216)">💎Mitosis OG</span>
+                            <span class="role-label" style="color:rgb(240, 60, 216)">💎 Mitosis OG</span>
                         </label>
                         <label class="role-item">
                             <input type="checkbox" name="additional-role" value="guru" onchange="toggleRole(this)">
-                            <span class="role-label" style="color:rgb(26, 255, 0)">🧙Guru</span>
+                            <span class="role-label" style="color:rgb(26, 255, 0)">🧙 Guru</span>
                         </label>
                     </div>
                 </div>
@@ -396,7 +426,7 @@
                         <!-- Artist -->
                         <label class="role-item">
                             <input type="checkbox" name="skill-role" value="artist" onchange="toggleSkill(this, 'artist')">
-                            <span class="role-label">🎨Artist</span>
+                            <span class="role-label" style="color:rgb(0, 255, 110)">🎨 Artist</span>
                             <div class="skill-options" id="artist-options">
                                 <div class="skill-level">
                                     <label class="skill-level-option">
@@ -418,7 +448,7 @@
                         <!-- Tuber -->
                         <label class="role-item">
                             <input type="checkbox" name="skill-role" value="tuber" onchange="toggleSkill(this, 'tuber')">
-                            <span class="role-label">🎥Tuber</span>
+                            <span class="role-label" style="color:rgb(255, 170, 0)">🎥 Tuber</span>
                             <div class="skill-options" id="tuber-options">
                                 <div class="skill-level">
                                     <label class="skill-level-option">
@@ -440,7 +470,7 @@
                         <!-- Analyst -->
                         <label class="role-item">
                             <input type="checkbox" name="skill-role" value="analyst" onchange="toggleSkill(this, 'analyst')">
-                            <span class="role-label">🗃️Analyst</span>
+                            <span class="role-label" style="color:rgb(0, 225, 255)">🗃️ Analyst</span>
                             <div class="skill-options" id="analyst-options">
                                 <div class="skill-level">
                                     <label class="skill-level-option">
@@ -462,7 +492,7 @@
                         <!-- Evangelist -->
                         <label class="role-item">
                             <input type="checkbox" name="skill-role" value="evangelist" onchange="toggleSkill(this, 'evangelist')">
-                            <span class="role-label">🕊️Evangelist</span>
+                            <span class="role-label" style="color:rgb(18, 8, 201)">🕊️ Evangelist</span>
                             <div class="skill-options" id="evangelist-options">
                                 <div class="skill-level">
                                     <label class="skill-level-option">
@@ -484,7 +514,7 @@
                         <!-- Consultant -->
                         <label class="role-item">
                             <input type="checkbox" name="skill-role" value="consultant" onchange="toggleSkill(this, 'consultant')">
-                            <span class="role-label">📝Consultant</span>
+                            <span class="role-label" style="color:rgb(107, 0, 222)">📝 Consultant</span>
                             <div class="skill-options" id="consultant-options">
                                 <div class="skill-level">
                                     <label class="skill-level-option">
@@ -552,17 +582,15 @@
                     <span class="result-label">Total Allocation:</span>
                     <span class="result-value total-value" id="total-allocation">-</span>
                 </div>
-                <div style="display: flex; justify-content: right;">
-                    <a href="https://x.com/svajpayee15">Made by @svajpayee15</a>
+                <div class="signature">
+                    <a href="https://x.com/svajpayee15" target="_blank">Made by @svajpayee15</a>
                 </div>
-
             </div>
         </div>
 
         <footer>
             Mitosis Allocation Checker | 0.55% of total supply (5.5M MITO)
         </footer>
-        <a href="https://x.com/svajpayee15">Made by @svajpayee15</a>
     </div>
 
     <script>
@@ -602,10 +630,36 @@
             }
         };
 
+        // Role display configuration
+        const roleDisplay = {
+            // Tier roles
+            'none': { emoji: '', text: 'None', color: 'inherit' },
+            'sensei': { emoji: '🧑‍🏫', text: 'Sensei', color: 'rgb(148, 28, 4)' },
+            'daigakusei': { emoji: '🧑‍🎓', text: 'Daigakusei', color: 'rgb(255, 85, 0)' },
+            'gakusei': { emoji: '', text: 'Gakusei', color: 'rgb(84, 70, 66)' },
+            'emeritus-sensei': { emoji: '', text: 'Emeritus Sensei', color: 'rgb(92, 18, 18)' },
+            
+            // Additional roles
+            'royal-gem': { emoji: '🦄', text: 'Royal Gem', color: '#d8b4fe' },
+            'og': { emoji: '💎', text: 'Mitosis OG', color: 'rgb(240, 60, 216)' },
+            'guru': { emoji: '🧙', text: 'Guru', color: 'rgb(26, 255, 0)' },
+            
+            // Skill roles
+            'artist': { emoji: '🎨', text: 'Artist', color: 'rgb(0, 255, 110)' },
+            'tuber': { emoji: '🎥', text: 'Tuber', color: 'rgb(255, 170, 0)' },
+            'analyst': { emoji: '🗃️', text: 'Analyst', color: 'rgb(0, 225, 255)' },
+            'evangelist': { emoji: '🕊️', text: 'Evangelist', color: 'rgb(18, 8, 201)' },
+            'consultant': { emoji: '📝', text: 'Consultant', color: 'rgb(107, 0, 222)' },
+            
+            // Skill levels
+            'intern': { text: 'Intern', color: '#c5cae9' },
+            'mi': { text: 'MI', color: '#bb86fc' }
+        };
+
         // Role selection handlers
         function toggleTierRole(element) {
             const parent = element.closest('.role-item');
-            document.querySelectorAll('.role-list .role-item').forEach(item => {
+            document.querySelectorAll('#tier-roles .role-item').forEach(item => {
                 item.classList.remove('selected');
             });
             
@@ -639,6 +693,51 @@
                 parent.classList.remove('selected');
                 options.style.display = 'none';
             }
+        }
+
+        // Create a role display element
+        function createRoleElement(roleKey, value = null, level = null) {
+            const role = roleDisplay[roleKey];
+            if (!role) return '';
+            
+            const roleElement = document.createElement('span');
+            roleElement.className = 'role-display';
+            roleElement.style.backgroundColor = 'rgba(0, 0, 0, 0.886)';
+            roleElement.style.color = role.color;
+            roleElement.style.border = `1px solid ${role.color}`;
+            roleElement.style.marginLeft = '5px';
+            
+            let content = `${role.emoji} ${role.text}`;
+            if (level) {
+                const levelInfo = roleDisplay[level];
+                if (levelInfo) {
+                    content += ` (${levelInfo.text})`;
+                }
+            }
+            
+            if (value !== null) {
+                content += `: <span class="role-value">${value.toLocaleString()} MITO</span>`;
+            }
+            
+            roleElement.innerHTML = content;
+            return roleElement.outerHTML;
+        }
+
+        // Format role list with values
+        function formatRoleList(roles, values, isSkill = false) {
+            if (roles.length === 0) return 'None';
+            
+            return roles.map((role, index) => {
+                if (isSkill) {
+                    return createRoleElement(
+                        role.name, 
+                        values[role.name][role.level], 
+                        role.level
+                    );
+                } else {
+                    return createRoleElement(role, values[role]);
+                }
+            }).join('');
         }
 
         // Main calculation function
@@ -718,20 +817,20 @@
             const totalAllocation = tierRoleValue + additionalRolesValue + skillRolesFinalValue + 
                                   multiSkillBonus + authorityBonus;
 
-            // Display results
-            document.getElementById('tier-role-result').textContent = 
-                hasTierRole ? 
-                `${tierRole.value.replace('-', ' ')} (${tierRoleValue.toLocaleString()} MITO)` : 
+            // Display results with formatted roles
+            const tierRoleResult = document.getElementById('tier-role-result');
+            tierRoleResult.innerHTML = hasTierRole ? 
+                createRoleElement(tierRole.value, tierRoleValue) : 
                 'None';
             
-            document.getElementById('additional-roles-result').textContent = 
-                additionalRoles.length > 0 ? 
-                `${additionalRoles.map(r => r.replace('-', ' ')).join(', ')} (${additionalRolesValue.toLocaleString()} MITO)` : 
+            const additionalRolesResult = document.getElementById('additional-roles-result');
+            additionalRolesResult.innerHTML = additionalRoles.length > 0 ? 
+                formatRoleList(additionalRoles, allocationValues) : 
                 'None';
             
-            document.getElementById('skill-roles-base').textContent = 
-                skillRoles.length > 0 ? 
-                `${skillRoles.map(r => `${r.name}-${r.level}`.replace('-', ' ')).join(', ')} (${skillRolesBaseValue.toLocaleString()} MITO)` : 
+            const skillRolesBase = document.getElementById('skill-roles-base');
+            skillRolesBase.innerHTML = skillRoles.length > 0 ? 
+                formatRoleList(skillRoles, allocationValues, true): 
                 'None';
             
             document.getElementById('skill-deduction').textContent = 
@@ -740,15 +839,19 @@
                 'None';
             
             document.getElementById('skill-roles-result').textContent = 
-                skillRoles.length > 0 ? 
+                skillRolesFinalValue > 0 ? 
                 `${skillRolesFinalValue.toLocaleString()} MITO` : 
                 'None';
             
             document.getElementById('multi-skill-bonus').textContent = 
-                `${multiSkillBonus.toLocaleString()} MITO (${skillRoles.length > 1 ? '5% per extra skill' : 'N/A'})`;
+                multiSkillBonus > 0 ? 
+                `${multiSkillBonus.toLocaleString()} MITO (5% per extra skill)` : 
+                'None';
             
             document.getElementById('authority-bonus').textContent = 
-                `${authorityBonus.toLocaleString()} MITO (${authorityBonus > 0 ? '5% for authority roles' : 'N/A'})`;
+                authorityBonus > 0 ? 
+                `${authorityBonus.toLocaleString()} MITO (5% for authority roles)` : 
+                'None';
             
             document.getElementById('total-allocation').textContent = 
                 `${Math.round(totalAllocation).toLocaleString()} MITO`;
